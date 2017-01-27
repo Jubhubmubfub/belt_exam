@@ -5,12 +5,88 @@
     <title>Success</title>
   </head>
   <body>
-    Success!
-    {%if messages%}
-      {%for message in messages%}
-        {{message}}
-      {%endfor%}
-    {%endif%}
+    <!-- WELCOME -->
+    Welcome, {{request.session.user.first_name}}
+
+    <!-- LOGOUT -->
     <a href="/logout"><button>Logout</button></a>
+    <br>
+
+
+
+    <!-- QUOTES/outermost div -->
+    <div>
+      <!-- QUOTES DIV -->
+      <br>Quotable Quotes<br>
+      <div style="border-style:solid;border-color:black; height: 500px; width: 300px;display:inline-block;overflow-y: scroll;">
+      <!-- ONLY PRINT QUOTES IF THEY ARE NOT CURRENTLY SHOWN IN FAVORITES COLUMN -->
+
+      <!-- FAVORITE HAS USER AND QUOTE ID -->
+      {%for quote in quotes%}
+
+
+
+        <!-- QUOTE DIV -->
+        <div style="border-style:solid;border-color:black; width: 250px;margin-left:5px;margin-top: 5px; vertical-align:top">{{quote.quoted_by}}: {{quote.quote}}
+        <br><br>
+
+        <!-- POSTED BY TAG-->
+        <em>posted by: </em><a href="/user/{{quote.user.id}}">{{quote.user.first_name}}</a>
+
+        <!-- ADD TO FAVORITES BUTTON -->
+        <a href="add_to_favorites/{{quote.id}}" style="padding-left:150px"><button>Add to My List</button></a>
+
+        </div>
+        <!-- END QUOTE DIV -->
+        {%endfor%}
+      </div>
+      <!-- END QUOTES DIV -->
+
+      <!-- FAVORITE AND CONTRIBUTE QUOTE OUTER DIV -->
+      <div style="width:350px; hieght:1000px;display:inline-block;vertical-align:top">
+
+
+        <!-- FAVORITES OUTER DIV -->
+        <div style="border-style:solid;border-color:black; width: 300px;height:300px;display:inline-block;vertical-align:top;padding-bottom:5px;overflow-y: scroll;">
+        Your favorites
+        {%for favorite in favorites%}
+
+          <!-- FAVORITE DIV -->
+          <div style="border-style:solid;border-color:black; width: 250px;margin-left:5px;margin-top: 5px;padding-bottom:2px;padding-left:5px">
+            {{favorite.quote.quoted_by}}: {{favorite.quote.quote}}
+            <br><br>
+
+            <!-- POSTED BY -->
+            <em>posted by: </em><a href="/user/{{favorite.quote.user.id}}">{{favorite.quote.user.first_name}}</a>
+
+            <!-- REMOVE FROM FAVORITES -->
+            <a href="remove_from_favorites/{{favorite.id}}" style="padding-left:120px"><button>Remove from My List</button></a>
+
+          </div>
+          {%endfor%}
+          <!-- END FAVORITE DIV -->
+        </div>
+      <!-- END FAVORITES DIV -->
+      <!-- FLASH MESSAGES -->
+      <br>
+      {%if messages%}
+        {%for message in messages%}
+          <br>{{message}}<br>
+        {%endfor%}
+      {%endif%}
+      <div style="width:250px; display:inline-block;vertical-align:">
+        <br>Contribute a Quote:
+        <form action="/contribute_quote/{{request.session.user.id}}" method="post">
+          {% csrf_token %}
+          Quoted By:<br> <input type="text" name="quoted_by" value="">
+          <br>Message:<br><textarea name="quote" rows="3" cols="20"></textarea>
+          <br><input type="submit" value="Submit">
+        </form>
+
+      </div>
+      <!-- END FAVORITES AND CONTRIBUTE QUOTE DIV -->
+    </div>
+    <!-- END OUTERMOST DIV -->
+
   </body>
 </html>

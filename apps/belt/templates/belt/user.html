@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Quotes</title>
+  </head>
+  <body>
+    <a href="/success">Dashboard</a> | <a href="/logout">Logout</a>
+    <h1>Posts by {{user.first_name}}</h1>
+    <h2>Count: {{count}}</h2>
+
+    {%for quote in quote_list%}
+    <span style="color:red">{{quote.quoted_by}}: </span> {{quote.quote}}<br><br>
+    {%endfor%}
+  </body>
+</html>
